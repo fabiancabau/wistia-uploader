@@ -1,0 +1,43 @@
+<form id="fileupload" action="{{action}}" method="POST" enctype="multipart/form-data" data-file-upload="options" data-ng-class="{'fileupload-processing': processing() || loadingFiles}">
+       <div class="row fileupload-buttonbar">
+           <div class="col-lg-7">
+               <span class="btn btn-success fileinput-button" ng-class="{disabled: queue.length >= 1}">
+                   <i class="glyphicon glyphicon-plus"></i>
+                   <span>Add File...</span>
+                   <input type="file" name="attachment">
+               </span>
+               <span class="fileupload-process"></span>
+           </div>
+           <div class="col-lg-5 fade" data-ng-class="{in: active()}">
+               <div class="progress progress-striped active" data-file-upload-progress="progress()"><div class="progress-bar progress-bar-success" data-ng-style="{width: num + '%'}"></div></div>
+               <div class="progress-extended">&nbsp;</div>
+           </div>
+       </div>
+
+       <table class="table table-striped files ng-cloak">
+           <tr ng-if="queue.length > 0" data-ng-class="{'processing': queue[0].$processing()}">
+               <td data-ng-switch data-on="!!queue[0].thumbnailUrl">
+                   <div class="preview" data-ng-switch-when="true">
+                       <a data-ng-href="{{queue[0].url}}" title="{{queue[0].name}}" download="{{queue[0].name}}" data-gallery><img data-ng-src="{{queue[0].thumbnailUrl}}" alt=""></a>
+                   </div>
+                   <div class="preview" data-ng-switch-default data-file-upload-preview="queue[0]"></div>
+               </td>
+               <td>
+                   <p class="name" data-ng-switch data-on="!!queue[0].url">
+                       <span data-ng-switch-when="true" data-ng-switch data-on="!!queue[0].thumbnailUrl">
+                           <a data-ng-switch-when="true" data-ng-href="{{queue[0].url}}" title="{{queue[0].name}}" download="{{queue[0].name}}" data-gallery>{{queue[0].name}}</a>
+                           <a data-ng-switch-default data-ng-href="{{queue[0].url}}" title="{{queue[0].name}}" download="{{queue[0].name}}">{{queue[0].name}}</a>
+                       </span>
+                       <span data-ng-switch-default>{{queue[0].name}}</span>
+                   </p>
+                   <strong data-ng-show="queue[0].error" class="error text-danger">{{queue[0].error}}</strong>
+               </td>
+               <td>
+                   <p class="size">{{queue[0].size | formatFileSize}}</p>
+                   <div class="progress progress-striped active fade" data-ng-class="{pending: 'in'}[queue[0].$state()]" data-file-upload-progress="queue[0].$progress()"><div class="progress-bar progress-bar-success" data-ng-style="{width: num + '%'}"></div></div>
+               </td>
+           </tr>
+       </table>
+   </form>
+
+   <ng-bind-html ng-bind-html="wistiaEmbed"></ng-bind-html>
